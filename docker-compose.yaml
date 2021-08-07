@@ -1,0 +1,69 @@
+version: '2'
+
+services:
+  php7:
+    build:
+      context: ./php7
+      args:
+        - USER_UID=${USER_UID}
+        - USER_GID=${USER_GID}
+    container_name: flex-php7
+    restart: always
+    volumes:
+      - ../:/var/www/
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+      - ./docker-php-memlimit.ini:/usr/local/etc/php/conf.d/docker-php-memlimit.ini
+      - ./openssl.cnf:/etc/ssl/openssl.cnf
+    networks:
+      - flex-network
+    tty: true
+    extra_hosts:
+      - host.local:${IP_LOCAL}
+    depends_on:
+      - mysql
+
+  nginx:
+    build: ./nginx
+    container_name: flex-nginx
+    restart: always
+    tty: true
+    ports:
+      - "80:80"
+      - "6001:6001"
+    volumes:
+      - ../:/var/www/
+      - ./nginx/sites/:/etc/nginx/conf.d/
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    extra_hosts:
+        - host.local:${IP_LOCAL}
+    networks:
+      - flex-network
+    depends_on:
+      - php7
+
+  mysql:
+    image: mysql:5.7
+    command: mysqld --sql_mode=""
+    container_name: flex-mysql
+    restart: always
+    tty: true
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - ${DATA_LIB}/data/mysql:/var/lib/mysql
+      - ./mysql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - "/etc/timezone:/etc/timezone:ro"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - 3306:3306
+    networks:
+      - flex-network
+
+networks: 
+  flex-network:
+    driver: bridge
+
