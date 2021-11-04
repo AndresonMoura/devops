@@ -1,0 +1,13 @@
+sudo bash -c 'cat << EOF > /etc/docker/daemon.json
+{
+  "insecure-registries": [
+    "registry.itbam.org.br",
+    "dockerhub.itbam.org.br",
+    "registry2.dominio.org.br:4000"
+  ]
+}
+EOF'
+
+sudo service docker restart
+
+sudo systemctl restart docker

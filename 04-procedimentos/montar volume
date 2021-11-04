@@ -1,0 +1,50 @@
+MONTAR VOLUME DO JENKINS MANUALMENTE:
+
+sudo mkdir -p /mnt/jenkins && sudo mount -t nfs 172.100.10.60:/mnt/HDD01/jenkins-ghostmarket /mnt/jenkins
+
+sudo mkdir -p /mnt/gitlab && sudo mount -t nfs 172.100.10.60:/mnt/HDD01/gitlab /mnt/gitlab
+
+---------------------------------------------------------------------------------------------------------------
+ACESSE O DIRETORIO:
+/etc/
+
+---------------------------------------------------------------------------------------------------------------
+EXECUTE: vim fstab
+---------------------------------------------------------------------------------------------------------------
+
+ADICIONE O DIRETÓRIO DE MONTAGEM DO VOLUME:
+
+# volume-storage
+	172.100.10.60:/mnt/HDD01/volume-storage/data-cluster-01 /mnt/volume-storage/data-cluster-01 nfs defaults 0 0
+
+---------------------------------------------------------------------------------------------------------------
+MONTAR O VOLUME MANUALMENTE:
+	sudo mkdir -p /mnt/volume-storage/data-cluster-01 && sudo mount -t nfs 172.100.10.60:/mnt/HDD01/volume-storage/data-cluster-01 /mnt/volume-storage/data-cluster-01
+	
+
+
+ADICIONAR REGISTRY NO DAON
+
+vim etc/docker/damon
+
+{
+"insecure-registries" : ["172.100.10.58:5000","registry2.itbam.org.br:4000"]
+}
+
+REINICAR O DOCKER
+
+systemctl restart docker
+
+
+
+senha Jenkins:
+
+JeNkInSTr@Ns1R3
+
+-integrar gitlab com o AD
+
+
+
+
+
+

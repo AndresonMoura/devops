@@ -1,0 +1,27 @@
+Vagrant.configure(2) do |config|
+  config.vm.define "vm001" do |vm001|
+    vm001.vm.box = "ubuntu/focal64"
+    vm001.vm.hostname = "focal"
+    vm001.vm.network "public_network", ip: "172.100.11.222"
+  end
+
+  config.vm.define "vm002" do |vm002|
+    vm002.vm.box = "ubuntu/focal64"
+    vm002.vm.hostname = "vm002"
+    vm002.vm.network "public_network", ip: "172.100.11.223"
+  end
+
+  config.vm.define "vm003" do |vm003|
+    vm003.vm.box = "ubuntu/focal64"
+    vm003.vm.hostname = "vm003"
+    vm003.vm.network "public_network", ip: "172.100.11.221"
+  end
+
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 2048
+    v.cpus = 4
+  end
+end
+
+
+

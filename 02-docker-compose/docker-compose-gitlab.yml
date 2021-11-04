@@ -1,0 +1,42 @@
+version: "3.6"
+services:
+
+  web:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: 'gitlab.itbam.org.br'
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        # web
+        external_url 'http://gitlab.itbam.org.br'
+
+        # registry
+        registry_external_url 'http://registry2.itbam.org.br:4000'
+        gitlab_rails['registry_enabled'] = true
+        gitlab_rails['registry_host'] = "registry2.itbam.org.br"
+        gitlab_rails['registry_port'] = "4000"
+        gitlab_rails['registry_path'] = "/mnt/registry"
+        gitlab_rails['registry_api_url'] = "http://registry:5000"
+
+        # Add any other gitlab.rb configuration here, each on its own line
+    ports:
+      - '80:80'
+      - '22:22'
+      - '4000:4000'
+    volumes:
+      - '/mnt/gitlab/config:/etc/gitlab'
+      - '/mnt/gitlab/logs:/var/log/gitlab'
+      - '/mnt/gitlab/data:/var/opt/gitlab'
+      - '/mnt/registry:/mnt/registry'
+
+  registry:
+    image: registry:2
+    restart: always
+    volumes:
+      - '/mnt/registry:/var/lib/registry'
+    ports:
+      - '5000:5000'
+
+networks:
+  default:
+    name: gitlab-net
