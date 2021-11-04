@@ -1,0 +1,44 @@
+1) Criação de chave ssh
+
+	ssh-keygen -t rsa
+--------------------------------------------------------------------------------------------
+2) endereço da chave:  /diretorio/chave/id_infra
+
+--------------------------------------------------------------------------------------------
+3) Copiar chave:
+
+	cp .ssh/id_infra.pub 
+
+--------------------------------------------------------------------------------------------
+4) Copiar chave pública:
+
+	scp /home/itbam/devops/ssh-keys/id_infra.pub itbam@172.100.10.64:/home/itbam
+
+--------------------------------------------------------------------------------------------
+5) Copiar conteúdo da chave:
+
+	cat id_jenkins.pub >> .ssh/authorized_keys
+
+--------------------------------------------------------------------------------------------
+6) Conectar no Servidor utilizando a chave:
+
+    ssh-copy-id -i id_jenkins.pub jenkins@172.100.11.222
+
+    ssh-keygen -R 172.100.10.X
+
+	ssh -i id_jenkins jenkins@172.100.10.X
+	ssh -i id_infra itbam@172.100.10.70
+
+
+
+
+
+jenkins-deploy-server-2
+
+gitlab-connecthus-org-br-jenkins
+
+
+http://172.100.10.24/itbam/sgr-back-end
+
+
+

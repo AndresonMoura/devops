@@ -1,0 +1,82 @@
+- hosts: all
+  become: yes
+  gather_facts: false
+  tasks:
+  - name: Install docker packages
+    remote_user: jenkins
+    apt:
+      name: "{{ item }}"
+      state: present
+      update_cache: yes
+    with_items:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common 
+      - maven
+      - openjdk-8-jre-headless
+      - git
+      - net-tools
+      - python3.9
+      - nfs-common
+    tags:
+      - docker
+  - name: Add Docker s official GPG key
+    remote_user: jenkins
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+    tags:
+      - docker
+  - name: Verify that we have the key with the fingerprint
+    remote_user: jenkins
+    apt_key:
+      id: 0EBFCD88
+      state: present
+    tags:
+      - docker
+  - name: Set up the stable repository
+    remote_user: jenkins
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+      state: present
+      update_cache: yes
+    tags:
+      - docker
+  - name: Update apt packages
+    remote_user: jenkins
+    apt:
+      update_cache: yes
+    tags:
+      - docker
+  - name: Install docker
+    remote_user: vagrant
+    apt:
+      name: docker-ce
+      state: present
+      update_cache: yes
+    #notify: Start docker on boot
+    tags:
+      - docker
+  - name: Add remote "jenkins" user to "docker" group
+    remote_user: jenkins
+    user:
+      name: "jenkins"
+      group: "docker"
+      append: yes
+    tags:
+      - docker
+  - name: Install docker-compose
+    remote_user: jenkins
+    get_url: 
+      url : https://github.com/docker/compose/releases/download/v2.0.1/docker-compose-darwin-x86_64
+      dest: /usr/local/bin/docker-compose
+      mode: 'u+x,g+x'
+
+# Criar usuário Jenkins
+
+# Autenticar o usuário jenkins no registry2.itbam.org.br
+      
+
+
+   
